@@ -1,0 +1,8 @@
+{
+    "env": {
+        "DB_USER": "surge-admin",
+        "DB_PSWD": "Surge1234",
+        "DB_NAME": "surgeDb-prod",
+        "JWT_KEY": "secret_encryption_key"
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "surge-api",
+  "version": "1.0.0",
+  "description": "This is backend api for the surge classes web portal to handle requests from react frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "jalla technologies",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.4",
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.14",
+    "multer": "^1.4.2",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
