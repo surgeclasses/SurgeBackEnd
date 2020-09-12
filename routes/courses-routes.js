@@ -24,6 +24,7 @@ router.get("/batch/:bid", courseController.getBatchById);
 
 router.patch("/addclasses/:bid", courseController.updateBatchClasses);
 
+router.post("/uploadlecture", courseController.uploadLecture);
 router.post("/uploadvideo", courseController.uploadVideo);
 router.post("/uploadfiles", courseController.uploadFile);
 router.patch("/addmeeturl/:bid", courseController.addMeetUrl);

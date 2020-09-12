@@ -23,8 +23,9 @@ app.use(bodyParser.json());
 
 app.use(fileUpload());
 
-// app.use('/uploads/classfiles', express.static(path.join('uploads','classfiles')));
-// app.use('/uploads/classvideos', express.static(path.join('uploads','classvideos')));
+app.use('/uploads/classfiles', express.static(path.join('uploads','classfiles')));
+app.use('/uploads/classvideos', express.static(path.join('uploads','classvideos')));
+app.use('/uploads/lectures', express.static(path.join('uploads','lectures')));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

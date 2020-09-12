@@ -55,7 +55,12 @@ const courseSchema = new Schema({
       title: String,
       topics: [
         {
-          type: String,
+          topic: { type: String, required: true },
+          lecture: {
+            type: mongoose.Types.ObjectId,
+            ref: "Lecture",
+            required: false,
+          },
         },
       ],
       required: false,

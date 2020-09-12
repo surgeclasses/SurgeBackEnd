@@ -9,7 +9,7 @@ const lectureSchema = new Schema({
     },
     description:{
         type: String,
-        require: true
+        require: false
     },
     videoPath:{
         type: String,

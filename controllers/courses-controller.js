@@ -1,8 +1,10 @@
-const fileUpload = require('express-fileupload');
-const { v4 : uuidv4 } = require('uuid');
+const fileUpload = require("express-fileupload");
+const { v4: uuidv4 } = require("uuid");
 const HttpError = require("../models/http-error");
 const Course = require("../models/course");
 const Batch = require("../models/coursebatch");
+const Lecture = require("../models/lecture");
+const mongoose = require("mongoose");
 
 let COURSES = [];
 
@@ -258,7 +260,7 @@ const updateClasses = async (req, res, next) => {
   try {
     batch = await Batch.findById(batchId);
     // batch.classes.classes[classIndex] = {...currentClass};// THIS NOT WORKING.. CHECK
-    batch.classes.classes.splice(classIndex,1,currentClass);
+    batch.classes.classes.splice(classIndex, 1, currentClass);
     batch.classes.classes.push(nextClass);
   } catch (err) {
     return next(
@@ -310,8 +312,8 @@ const addMeetUrl = async (req, res, next) => {
 
 const uploadFile = (req, res) => {
   const chosenFile = req.files.classdocs;
-  let temp = chosenFile.name.split('.');
-  const ext = temp[temp.length-1];
+  let temp = chosenFile.name.split(".");
+  const ext = temp[temp.length - 1];
   const filePath = `uploads/classfiles/${uuidv4()}.${ext}`;
   chosenFile.mv(filePath, function (err) {
     if (err) return res.status(500).send(err);
@@ -321,13 +323,51 @@ const uploadFile = (req, res) => {
 
 const uploadVideo = (req, res) => {
   const chosenFile = req.files.classvideo;
-  let temp = chosenFile.name.split('.');
-  const ext = temp[temp.length-1];
+  let temp = chosenFile.name.split(".");
+  const ext = temp[temp.length - 1];
   const filePath = `uploads/classvideos/${uuidv4()}.${ext}`;
   chosenFile.mv(filePath, function (err) {
     if (err) return res.status(500).send(err);
     res.status(200).json({ path: filePath });
   });
+};
+
+const uploadLecture = async (req, res) => {
+  const { courseId, titleIndex, topicIndex } = req.body;
+  let course;
+  try {
+    course = await Course.findById(courseId);
+  } catch (err) {
+    return next(
+      new HttpError("Could not find the course for the given id", 500)
+    );
+  }
+
+  const chosenFile = req.files.lecture;
+  let temp = chosenFile.name.split(".");
+  const ext = temp[temp.length - 1];
+  const filePath = `uploads/lectures/${uuidv4()}.${ext}`;
+  chosenFile.mv(filePath, (err) => {
+    if (err) return res.status(500).send(err);
+  });
+
+  const newLecture = new Lecture({
+    title,
+    videoPath: filePath,
+    duration,
+  });
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await newLecture.save({ session: sess });
+    course.syllabus[titleIndex].topics[topicIndex].lecture = newLecture;
+    await course.save({ session: sess });
+
+    await sess.commitTransaction();
+  } catch (error) {}
+  
+  res.status(201).json({ message: "success", course: data });
 };
 
 const updateCourseSyllabus = async (req, res, next) => {
@@ -366,4 +406,5 @@ exports.getCoursesByInstructor = getCoursesByInstructor;
 exports.getBatchById = getBatchById;
 exports.uploadFile = uploadFile;
 exports.uploadVideo = uploadVideo;
+exports.uploadLecture = uploadLecture;
 exports.addMeetUrl = addMeetUrl;
