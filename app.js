@@ -60,8 +60,11 @@ app.use((error, req, res, nexts) => {
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSWD}@surge-2sgo8.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+    `mongodb+srv://surge-admin:Surge1234@surge-2sgo8.gcp.mongodb.net/surgeDb-prod?retryWrites=true&w=majority`
     , { useNewUrlParser: true, useUnifiedTopology: true }
+    
+    // `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PSWD}@surge-2sgo8.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+    // , { useNewUrlParser: true, useUnifiedTopology: true }
     
   )
   .then((client) => {
